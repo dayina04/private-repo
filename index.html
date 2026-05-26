@@ -1,1 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Hotel Anupama Inn | iOS Glass · Family Restaurant</title>
+    <style>
+        /* ---------- iOS 26 Glass UIUX – refined frosted glass, premium subtlety ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            /* glass core */
+            --glass-base: rgba(28, 32, 40, 0.62);
+            --glass-dark: rgba(18, 22, 28, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.28);
+            --glass-border-light: rgba(255, 255, 255, 0.18);
+            --glass-highlight: rgba(255, 245, 210, 0.12);
+            --accent: #FFB347;
+            --accent-soft: #FFCD8C;
+            --accent-glow: 0 0 16px rgba(255, 180, 71, 0.4);
+            --text-primary: #FEFAF2;
+            --text-secondary: #C9D3DF;
+            --blur-ios: blur(28px) saturate(180%);
+            --blur-card: blur(20px) saturate(160%);
+            --shadow-ios: 0 8px 28px rgba(0, 0, 0, 0.28), 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+            --shadow-ios-hover: 0 18px 36px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 200, 120, 0.3);
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #10151c, #03070c);
+            font-family: -apple-system, 'SF Pro Text', 'Inter', 'Segoe UI', system-ui, Helvetica, sans-serif;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+            letter-spacing: -0.2px;
+        }
+
+        /* ambient animated glow */
+        .ambient-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(110px);
+            opacity: 0.28;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glow-1 { width: 70vmax; height: 70vmax; background: #3e6b8f; top: -30%; left: -20%; animation: drift 24s infinite alternate; }
+        .glow-2 { width: 60vmax; height: 60vmax; background: #b45f3a; bottom: -20%; right: -10%; opacity: 0.2; animation: drift 20s infinite alternate-reverse; }
+        @keyframes drift { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(6%, 8%) scale(1.08); } }
+
+        .main-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 1.2rem 1.5rem 2.5rem;
+        }
+
+        /* ------ iOS 26 Glass Header (Text only, no image) ------ */
+        .glass-hero {
+            background: var(--glass-base);
+            backdrop-filter: var(--blur-ios);
+            -webkit-backdrop-filter: var(--blur-ios);
+            border-radius: 44px;
+            border: 1px solid var(--glass-border);
+            padding: 1.4rem 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-ios);
+            transition: all 0.3s ease;
+        }
+        .restaurant-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            background: linear-gradient(135deg, #FFF5E6, #FFD29E);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .restaurant-sub {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            margin-top: 0.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .restaurant-sub span {
+            background: rgba(255,255,245,0.12);
+            padding: 4px 12px;
+            border-radius: 60px;
+            font-size: 0.75rem;
+            backdrop-filter: blur(4px);
+        }
+        .offer-chip {
+            background: rgba(255, 179, 71, 0.22) !important;
+            border: 0.5px solid rgba(255, 179, 71, 0.5);
+            color: #FFDA9E;
+        }
+
+        /* promo banner */
+        .promo-banner {
+            background: rgba(255, 179, 71, 0.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 180, 71, 0.35);
+            border-radius: 40px;
+            padding: 0.75rem 1.5rem;
+            margin: 0.8rem 0 1.5rem;
+            text-align: center;
+            font-weight: 520;
+            font-size: 0.85rem;
+            color: #FFE2B5;
+        }
+
+        /* category tabs — ios style pill */
+        .cat-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 1rem 0 1.5rem;
+        }
+        .cat-tab {
+            background: rgba(30, 36, 44, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border-light);
+            padding: 0.6rem 1.3rem;
+            border-radius: 80px;
+            font-weight: 590;
+            font-size: 0.85rem;
+            color: #E9EDF2;
+            transition: all 0.22s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            cursor: pointer;
+        }
+        .cat-tab.active, .cat-tab:hover {
+            background: rgba(255, 179, 71, 0.22);
+            border-color: var(--accent);
+            color: white;
+            box-shadow: 0 0 14px rgba(255, 179, 71, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* search bar glass */
+        .search-bar {
+            margin: 0.8rem auto 1.8rem;
+            max-width: 440px;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 0.85rem 1.5rem;
+            border-radius: 60px;
+            background: rgba(22, 28, 36, 0.68);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border-light);
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 16px rgba(255, 180, 71, 0.35);
+            background: rgba(28, 34, 44, 0.85);
+        }
+
+        /* menu grid — iOS cards */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .menu-item {
+            background: var(--glass-dark);
+            backdrop-filter: var(--blur-card);
+            border: 1px solid var(--glass-border-light);
+            border-radius: 28px;
+            padding: 1rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .menu-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+            background: rgba(32, 40, 52, 0.78);
+            box-shadow: var(--shadow-ios-hover);
+        }
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .item-name {
+            font-weight: 640;
+            font-size: 1rem;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .item-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+            font-size: 0.7rem;
+            color: #BECBD9;
+        }
+        .veg-badge, .nonveg-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            background: #2C9A6E;
+            color: white;
+        }
+        .nonveg-badge { background: #E4685C; }
+        .item-price {
+            font-weight: 750;
+            color: var(--accent-soft);
+            font-size: 1.1rem;
+            white-space: nowrap;
+        }
+        .add-btn {
+            background: rgba(255,255,245,0.1);
+            border: 1px solid var(--glass-border);
+            padding: 0.45rem 1.2rem;
+            border-radius: 36px;
+            font-weight: 590;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: #FFF2E0;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .add-btn:hover {
+            background: rgba(255, 179, 71, 0.3);
+            border-color: var(--accent);
+            transform: scale(0.96);
+        }
+
+        /* cart summary bar ios glass */
+        .cart-summary {
+            position: sticky;
+            bottom: 20px;
+            background: rgba(18, 24, 32, 0.85);
+            backdrop-filter: blur(36px);
+            border: 1px solid rgba(255, 179, 71, 0.45);
+            border-radius: 60px;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 0 0.5px rgba(255, 200, 140, 0.3);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cart-summary:active { transform: scale(0.99); }
+
+        /* cart drawer */
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(12px);
+            z-index: 300;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.25s;
+        }
+        .cart-overlay.open { opacity: 1; visibility: visible; }
+        .cart-panel {
+            position: fixed;
+            top: 0;
+            right: -460px;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: rgba(12, 18, 26, 0.96);
+            backdrop-filter: blur(42px);
+            border-left: 1px solid rgba(255, 180, 71, 0.5);
+            z-index: 301;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.4s cubic-bezier(0.2, 0.85, 0.4, 1);
+            box-shadow: -12px 0 40px rgba(0, 0, 0, 0.6);
+        }
+        .cart-panel.open { right: 0; }
+
+        /* glass cards for reservation & map */
+        .glass-card {
+            background: rgba(20, 26, 34, 0.65);
+            backdrop-filter: blur(24px);
+            border-radius: 36px;
+            border: 1px solid var(--glass-border-light);
+            padding: 1.6rem;
+            margin-top: 1.8rem;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-ios);
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 180, 71, 0.4);
+        }
+        input, select {
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border-light);
+            border-radius: 44px;
+            padding: 0.75rem 1.2rem;
+            color: white;
+        }
+        button.reserve-btn {
+            background: var(--accent);
+            border: none;
+            border-radius: 44px;
+            font-weight: 700;
+            color: #1E1A12;
+        }
+        .delivery-glass {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.2rem;
+            background: rgba(20, 28, 36, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 36px;
+            border: 1px solid rgba(255, 180, 71, 0.3);
+        }
+        iframe { border-radius: 28px; box-shadow: var(--shadow-ios); }
+        footer {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+        @media (max-width: 680px) {
+            .main-container { padding: 0.8rem; }
+            .restaurant-title { font-size: 2rem; }
+            .glass-hero { padding: 1rem; }
+            .cat-tab { padding: 0.45rem 1rem; font-size: 0.75rem; }
+            .menu-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="ambient-glow glow-1"></div>
+<div class="ambient-glow glow-2"></div>
+
+<!-- Cart Overlay & Drawer -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-panel" id="cartPanel">
+    <div style="padding:1.2rem; border-bottom:1px solid rgba(255,200,120,0.25); display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="font-weight:600;">🛒  Your Cart</h3>
+        <button id="closeCartBtn" style="background:none; border:none; color:#FFD89F; font-size:1.8rem; cursor:pointer;">✕</button>
+    </div>
+    <div id="cartItemsContainer" style="flex:1; overflow-y:auto; padding:1rem;"></div>
+    <div style="padding:1rem 1.2rem; border-top:1px solid rgba(255,200,120,0.2); display:flex; justify-content:space-between; font-weight:700;">
+        <span>Total</span>
+        <span id="cartTotalPrice" style="color:#FFB347;">₹0</span>
+    </div>
+    <button id="checkoutBtn" style="margin:1rem; padding:0.9rem; background:linear-gradient(100deg,#FFB347,#E5902E); border:none; border-radius:50px; font-weight:800; color:#151A1F; cursor:pointer;">Proceed to Checkout</button>
+</div>
+
+<main class="main-container">
+    <!-- iOS Glass Header (simple text, no image) -->
+    <div class="glass-hero">
+        <h1 class="restaurant-title">Hotel Anupama Inn</h1>
+        <div class="restaurant-sub">
+            <span>🏆 Family Restaurant</span>
+            <span class="offer-chip">🎓 AU Students Offers</span>
+            <span>⏱️ 20-40 min delivery</span>
+        </div>
+        <p style="margin-top: 0.8rem; font-size: 0.85rem; color: #D8E2ED;">Tiffins · Meals · Biryani · Chinese · Juices & Shakes</p>
+    </div>
+
+    <!-- Promo text -->
+    <div class="promo-banner">
+        🍛 <strong>SPECIAL COMBO OFFERS</strong> – Tiffins, Meals, Biryani and more. Free delivery on orders above ₹200!
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="cat-tabs" id="categoryTabs">
+        <button class="cat-tab active" data-cat="all">ALL</button>
+        <button class="cat-tab" data-cat="Tiffins">TIFFINS</button>
+        <button class="cat-tab" data-cat="Biryani">BIRYANI</button>
+        <button class="cat-tab" data-cat="Fried Rice">FRIED RICE</button>
+        <button class="cat-tab" data-cat="Curries">CURRIES</button>
+        <button class="cat-tab" data-cat="Drinks">DRINKS</button>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+        <input type="text" id="searchField" placeholder="🔍 Search for dosa, biryani, shakes...">
+    </div>
+
+    <!-- Dynamic Menu Grid -->
+    <div id="menuContainer" style="min-height: 200px;"></div>
+
+    <!-- Sticky Cart Bar -->
+    <div class="cart-summary" id="cartSummaryBar">
+        <div><strong>🛒 Your Cart</strong> <span style="margin-left:10px; font-size:0.8rem;" id="cartSummaryText">Add items</span></div>
+        <div><span id="cartItemCount" style="font-weight:800;">0</span> items · <span id="cartTotalSmall">₹0</span></div>
+    </div>
+
+    <!-- Substitution note glass -->
+    <div style="background:rgba(22,30,38,0.55); backdrop-filter:blur(16px); border-radius:28px; padding:0.75rem 1.2rem; margin-top:1.2rem; font-size:0.75rem; text-align:center;">
+        🔄 Substitution friendly — just mention while ordering. We customise for your taste.
+    </div>
+
+    <!-- Reservation Section -->
+    <div id="reserveSection" class="glass-card">
+        <h2 style="font-weight:600; letter-spacing:-0.3px;">📅 Reserve a Table</h2>
+        <p style="color:#C7D3E0; margin-bottom:1rem;">Experience authentic ambiance with family & friends</p>
+        <form id="reservationForm" style="display:flex; flex-wrap:wrap; gap:12px;">
+            <input type="text" placeholder="Full Name" id="resName" required style="flex:1;">
+            <input type="date" id="resDate" required style="flex:1;">
+            <input type="time" id="resTime" required style="flex:1;">
+            <select id="resGuests" style="flex:1;">
+                <option>1 Guest</option><option>2 Guests</option><option>3 Guests</option><option>4 Guests</option><option>5+ Guests</option>
+            </select>
+            <button type="submit" class="reserve-btn" style="padding:0.75rem 1.2rem;">Confirm Reservation</button>
+        </form>
+    </div>
+
+    <!-- Location Map Glass Card -->
+    <div class="glass-card">
+        <h3 style="font-weight:600;">📍 Visit Hotel Anupama Inn</h3>
+        <p>Near AU Campus, Visakhapatnam · Open daily 7:30 AM – 10:30 PM</p>
+        <div style="border-radius:28px; overflow:hidden; margin:1rem 0; border:1px solid rgba(255,255,240,0.2);">
+            <iframe src="https://maps.google.com/maps?q=Visakhapatnam+AU+campus+restaurant&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="240" style="border:0;" loading="lazy"></iframe>
+        </div>
+        <a href="https://maps.app.goo.gl/ZgqaxUxiSSj5dnvVA" target="_blank" style="color:#FFB347; font-weight:500;">🗺️ Open in Google Maps →</a>
+    </div>
+
+    <!-- Delivery / Order Now Glass -->
+    <div class="delivery-glass">
+        <p style="font-size:1.1rem; font-weight:600;">🚀 Delivery · Order Now</p>
+        <p style="font-size:1.25rem; margin:8px 0;">📞 <a href="tel:9550454565" style="color:#FFB347; text-decoration:none;">9550454565</a> / <a href="tel:9573573123" style="color:#FFB347; text-decoration:none;">9573573123</a></p>
+        <p style="color:#C9DAEA;">Free delivery · 20-40 minutes · Hot & Fresh</p>
+    </div>
+
+    <footer>© Hotel Anupama Inn Family Restaurant — Tiffins | Meals | Biryani | Chinese</footer>
+</main>
+
+<script>
+    // MENU DATA (full authentic)
+    const menuItems = [
+        { name: "Idly (3pcs)", price: 50, cat: "Tiffins", veg: true },
+        { name: "Sambar Idly (2)", price: 50, cat: "Tiffins", veg: true },
+        { name: "Ghee Karam Idly (2)", price: 50, cat: "Tiffins", veg: true },
+        { name: "Mysore Bonda (4)", price: 50, cat: "Tiffins", veg: true },
+        { name: "Upma", price: 50, cat: "Tiffins", veg: true },
+        { name: "Vada (3)", price: 50, cat: "Tiffins", veg: true },
+        { name: "Plain Dosa", price: 50, cat: "Tiffins", veg: true },
+        { name: "Masala Dosa", price: 60, cat: "Tiffins", veg: true },
+        { name: "Ghee Masala Dosa", price: 70, cat: "Tiffins", veg: true },
+        { name: "Paneer Dosa", price: 100, cat: "Tiffins", veg: true },
+        { name: "Poori (2)", price: 60, cat: "Tiffins", veg: true },
+        { name: "Parota", price: 60, cat: "Tiffins", veg: true },
+        { name: "Chicken Dum Biryani", price: 150, cat: "Biryani", veg: false },
+        { name: "Chicken Lollipop Biryani", price: 160, cat: "Biryani", veg: false },
+        { name: "Mutton Biryani", price: 300, cat: "Biryani", veg: false },
+        { name: "Veg Biryani", price: 120, cat: "Biryani", veg: true },
+        { name: "Paneer Biryani", price: 170, cat: "Biryani", veg: true },
+        { name: "Kaju Biryani", price: 160, cat: "Biryani", veg: true },
+        { name: "Egg Fried Rice", price: 100, cat: "Fried Rice", veg: false },
+        { name: "Chicken Fried Rice", price: 120, cat: "Fried Rice", veg: false },
+        { name: "Veg Fried Rice", price: 100, cat: "Fried Rice", veg: true },
+        { name: "Chicken Schezwan Fried Rice", price: 130, cat: "Fried Rice", veg: false },
+        { name: "Prawn Fried Rice", price: 190, cat: "Fried Rice", veg: false },
+        { name: "Mixed Fried Rice (Chicken & Prawn)", price: 180, cat: "Fried Rice", veg: false },
+        { name: "Veg Meals", price: 140, cat: "Curries", veg: true },
+        { name: "Chicken Curry", price: 120, cat: "Curries", veg: false },
+        { name: "Prawn Curry", price: 150, cat: "Curries", veg: false },
+        { name: "Paneer Butter Masala", price: 140, cat: "Curries", veg: true },
+        { name: "Mushroom Curry", price: 120, cat: "Curries", veg: true },
+        { name: "Mixed Kadi Veg", price: 100, cat: "Curries", veg: true },
+        { name: "Grape Juice", price: 50, cat: "Drinks", veg: true },
+        { name: "Pineapple Juice", price: 50, cat: "Drinks", veg: true },
+        { name: "Watermelon Juice", price: 50, cat: "Drinks", veg: true },
+        { name: "Chocolate Shake", price: 80, cat: "Drinks", veg: true },
+        { name: "Mango Shake", price: 80, cat: "Drinks", veg: true },
+        { name: "Butterscotch Shake", price: 80, cat: "Drinks", veg: true },
+        { name: "Strawberry Shake", price: 80, cat: "Drinks", veg: true },
+    ];
+
+    let cart = [];
+    let activeCat = "all";
+
+    function saveCart() { localStorage.setItem("anupama_cart_v2", JSON.stringify(cart)); }
+    function loadCart() {
+        const saved = localStorage.getItem("anupama_cart_v2");
+        cart = saved ? JSON.parse(saved) : [];
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const count = cart.reduce((s, i) => s + i.qty, 0);
+        document.getElementById("cartTotalPrice").innerText = "₹" + total;
+        document.getElementById("cartTotalSmall").innerText = "₹" + total;
+        document.getElementById("cartItemCount").innerText = count;
+        document.getElementById("cartSummaryText").innerText = count ? `${count} item${count>1?'s':''} in cart` : "Add items to order";
+        const container = document.getElementById("cartItemsContainer");
+        if (!container) return;
+        if (!cart.length) {
+            container.innerHTML = `<div style="text-align:center; padding:2rem; color:#B0C4DE;">✨ Your cart is empty. Add delicious items.</div>`;
+            return;
+        }
+        container.innerHTML = cart.map((item, idx) => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.8rem; border-bottom:1px solid rgba(255,200,120,0.2);">
+                <div><strong>${item.name}</strong><br><span style="color:#FFB347;">₹${item.price}</span></div>
+                <div style="display:flex; gap:12px; align-items:center;">
+                    <button onclick="changeQty(${idx}, -1)" style="background:rgba(255,235,200,0.15); border:none; width:30px; height:30px; border-radius:40px; color:white;">−</button>
+                    <span>${item.qty}</span>
+                    <button onclick="changeQty(${idx}, 1)" style="background:rgba(255,235,200,0.15); border:none; width:30px; height:30px; border-radius:40px; color:white;">+</button>
+                    <button onclick="removeItem(${idx})" style="background:#C23B2B; border:none; border-radius:30px; padding:4px 12px; color:white;">🗑</button>
+                </div>
+            </div>
+        `).join("");
+    }
+
+    window.changeQty = function(idx, delta) {
+        cart[idx].qty += delta;
+        if (cart[idx].qty <= 0) cart.splice(idx,1);
+        saveCart(); updateCartUI();
+    };
+    window.removeItem = function(idx) { cart.splice(idx,1); saveCart(); updateCartUI(); };
+    window.addToCart = function(name, price) {
+        const existing = cart.find(i => i.name === name);
+        if(existing) existing.qty++;
+        else cart.push({ name, price, qty:1 });
+        saveCart(); updateCartUI();
+        const bar = document.querySelector(".cart-summary");
+        bar.style.transform = "scale(1.02)";
+        setTimeout(() => bar.style.transform = "", 150);
+    };
+
+    function renderMenu(filterCat = "all", searchTerm = "") {
+        let filtered = menuItems.filter(item => {
+            if (filterCat !== "all" && item.cat !== filterCat) return false;
+            if (searchTerm && !item.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+            return true;
+        });
+        const container = document.getElementById("menuContainer");
+        if (!filtered.length) {
+            container.innerHTML = `<div style="text-align:center; padding:2rem; background:rgba(0,0,0,0.3); border-radius:2rem;">🍽️ No items found. Try another category.</div>`;
+            return;
+        }
+        const grouped = {};
+        filtered.forEach(i => { if (!grouped[i.cat]) grouped[i.cat] = []; grouped[i.cat].push(i); });
+        let html = "";
+        for (let [cat, items] of Object.entries(grouped)) {
+            html += `<div style="margin-bottom:2rem;"><h3 style="font-size:1.4rem; margin-bottom:0.8rem; font-weight:620; background:linear-gradient(120deg,#FFE6C7,#FFC68A); background-clip:text; -webkit-background-clip:text; color:transparent;">${cat}</h3><div class="menu-grid">`;
+            items.forEach(item => {
+                const badge = item.veg ? '<span class="veg-badge">V</span>' : '<span class="nonveg-badge">N</span>';
+                html += `
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-meta">${badge}<span>${item.cat}</span></div>
+                    </div>
+                    <div class="item-price">₹${item.price}</div>
+                    <button class="add-btn" onclick="addToCart('${item.name.replace(/'/g, "\\'")}', ${item.price})">ADD</button>
+                </div>`;
+            });
+            html += `</div></div>`;
+        }
+        container.innerHTML = html;
+    }
+
+    // Event handlers
+    document.getElementById("categoryTabs").addEventListener("click", (e) => {
+        if (e.target.classList.contains("cat-tab")) {
+            document.querySelectorAll(".cat-tab").forEach(btn => btn.classList.remove("active"));
+            e.target.classList.add("active");
+            activeCat = e.target.dataset.cat;
+            renderMenu(activeCat, document.getElementById("searchField").value);
+        }
+    });
+    document.getElementById("searchField").addEventListener("input", (e) => renderMenu(activeCat, e.target.value));
+
+    const cartOverlay = document.getElementById("cartOverlay"), cartPanel = document.getElementById("cartPanel");
+    document.getElementById("cartSummaryBar").addEventListener("click", () => { cartPanel.classList.add("open"); cartOverlay.classList.add("open"); });
+    document.getElementById("closeCartBtn").addEventListener("click", () => { cartPanel.classList.remove("open"); cartOverlay.classList.remove("open"); });
+    cartOverlay.addEventListener("click", () => { cartPanel.classList.remove("open"); cartOverlay.classList.remove("open"); });
+    document.getElementById("checkoutBtn").addEventListener("click", () => {
+        if (!cart.length) { alert("Your cart is empty. Add some items!"); return; }
+        const total = cart.reduce((s,i) => s + i.price*i.qty,0);
+        alert(`✅ Order placed! Total ₹${total}. We'll contact you shortly. Thanks for ordering!`);
+        cart = []; saveCart(); updateCartUI(); cartPanel.classList.remove("open"); cartOverlay.classList.remove("open");
+    });
+    document.getElementById("reservationForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("resName").value;
+        const date = document.getElementById("resDate").value;
+        const time = document.getElementById("resTime").value;
+        alert(`🎉 Thank you ${name}! Table reserved for ${date} at ${time}. See you soon!`);
+        e.target.reset();
+    });
+
+    loadCart();
+    renderMenu();
+</script>
+</body>
+</html>
